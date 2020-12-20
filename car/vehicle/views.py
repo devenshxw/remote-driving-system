@@ -1,6 +1,7 @@
 from django.views.generic import View
 from django.http import JsonResponse
 from vehicle.models import Vehicles
+import socket
 
 
 class LoginView(View):
@@ -31,5 +32,14 @@ class LoginView(View):
             return JsonResponse({'msg': '1VIN或密码错误'})
         else:
             if ret:
+                # 创建套接字
+                tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                # 链接
+                tcp_socket.connect(("192.168.0.112", 8888))
+                # 收发数据
+                tcp_socket.send(ret)
+
                 return JsonResponse({'msg': '2登录成功'})
+                # 关闭套接字
+                tcp_socket.close()
 
