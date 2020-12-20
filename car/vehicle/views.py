@@ -32,14 +32,16 @@ class LoginView(View):
             return JsonResponse({'msg': '1VIN或密码错误'})
         else:
             if ret:
+                print('---1---')
                 # 创建套接字
                 tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 # 链接
-                tcp_socket.connect(("192.168.0.112", 8888))
+                tcp_socket.connect(("192.168.0.114", 8888))
                 # 收发数据
-                tcp_socket.send(ret)
-
-                return JsonResponse({'msg': '2登录成功'})
+                tcp_socket.send('connect ok'.encode('utf-8'))
                 # 关闭套接字
                 tcp_socket.close()
+
+                return JsonResponse({'msg': '2登录成功'})
+
 
