@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>连接</title>
+    <style type="text/css">
+        body{
+            background-color: #fff;
+            margin: 0;
+        }
+
+        .con{
+            width: 600px;
+            height: 300px;
+            background-color: #fff;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            margin-left: -300px;
+            margin-top: -150px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="con">
+        <table border="1">
+            <tr><td>VIN</td><td><input type="text" v-model="vincode"></td></tr>
+            <tr><td>密码</td><td><input type="text" v-model="password"></td></tr>
+        </table>
+        <button @click="login">开锁</button>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script  type="text/javascript">
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            vincode: "",
+            password: "",
+        },
+        methods: {
+
+            login:function(){                
+                let url = 'http://192.168.0.112:8000/?vincode='+this.vincode+'&password='+this.password;
+                axios.get(url).then((response)=>{
+                    if(response.data.msg == '2登录成功'){
+                        $(window).attr('location','./client.html');
+                    }else{
+                        window.location.reload();
+                    };
+                }).catch((error)=>{
+                    alert(error);
+                    window.location.reload();
+                });
+
+                // axios.get(url).then(()=>{
+                //     alert('回来了');
+                //     // console.log(response.data);
+                //     // if(response.data.msg == '2登录成功'){
+                //     //     $(window).attr('location','http://www.baidu.com');
+                //     // }else{
+                //     //     window.location.reload();
+                //     // }
+                // })
+            },
+        }
+})
+</script>
+</html>

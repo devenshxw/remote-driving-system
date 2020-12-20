@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小车控制app</title>
+    <style type="text/css">
+        body{
+            background-color: #000;
+            margin: 0;
+        }
+
+        .con{
+            width: 600px;
+            height: 300px;
+            background-color: #fff;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            margin-left: -300px;
+            margin-top: -150px;
+        }
+
+        .engine{
+            width: 100px;
+            height: 100px;
+            background-color: gray;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            z-index: 1000;
+            display: none;
+        }
+        /*
+        .left-menu{
+            width: 125px;
+            height: 125px;
+            background-color: gold;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            z-index: 10000;
+        }
+        */
+
+        .left-menu-button{
+            width: 25px;
+            height: 25px;
+            background-color: gray;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            z-index: 999;
+        }
+
+        .left-menu:hover .engine{
+            display: block;
+        }
+
+        .tm{
+            width: 250px;
+            height: 25px;
+            background-color: gray;
+            position: absolute;
+            left: 50%;
+            bottom: 0px;
+            margin-left: -125px;
+            z-index: 1000;
+        }
+
+        .steering{
+            float: left;
+        }
+
+        .speed-ctrl{
+            float: right;
+        }
+
+        .forward-view{
+            width: 600px;
+            height: 300px;
+            background-color: red;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 10;
+        }
+
+        .left-view{
+            width: 100px;
+            height: 70px;
+            background-color: cyan;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            margin-top: -35px;
+            z-index: 100;
+        }
+
+        .right-view{
+            width: 100px;
+            height: 70px;
+            background-color: cyan;
+            position: absolute;
+            right: 0;
+            top: 50%;
+            margin-top: -35px;
+            z-index: 100;
+        }
+
+        .back-view{
+            width: 100px;
+            height: 25px;
+            background-color: cyan;
+            position: absolute;
+            left: 50%;
+            bottom: 25px;
+            margin-left: -50px;
+            z-index: 100;
+        }
+
+        .speed{
+            width: 250px;
+            height: 25px;
+            background-color: cyan;
+            position: absolute;
+            left: 50%;
+            top: 0;
+            margin-left: -125px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="con">
+        <div class="left-menu">
+            <div class="left-menu-button">o</div>
+            <div class="engine">
+                <div class="start-stop">
+                    <input type="checkbox" name="ss" value="Start/Stop" v-on:change="ssEvent" v-model="ss">On|Off
+                </div>
+                <div class="tm-range">
+                    <input type="radio" name="range" value="p-range" v-on:change="tmEvent" v-model="range">P<br>
+                    <input type="radio" name="range" value="r-range" v-on:change="tmEvent" v-model="range">R<br>
+                    <input type="radio" name="range" value="n-range" v-on:change="tmEvent" v-model="range">N<br>
+                    <input type="radio" name="range" value="d-range" v-on:change="tmEvent" v-model="range">D<br>
+                </div>
+            </div>
+        </div>
+
+        <div class="tm">
+            <div class="steering">
+                <button v-on:click="turnLeftEvent">←</button>
+                <button v-on:click="turnRightEvent">→</button>
+            </div>
+            <div class="speed-ctrl">
+                <button v-on:click="speedDownEvent">-</button>
+                <button v-on:click="speedUpEvent">+</button>
+            </div>
+        </div>
+
+        <div class="forward-view">
+            <img style="-webkit-user-select: none;margin: auto;" src="http://192.168.0.10:8080/?action=stream" width="600" height="300">
+        </div>
+        <div class="left-view">
+            <img style="-webkit-user-select: none;margin: auto;" src="http://192.168.0.10:8081/?action=stream" width="100" height="70">
+        </div>
+        <div class="right-view">右视图</div>
+        <div class="back-view">后视图</div>
+        <div class="speed">车速</div>
+    </div>
+</div>
+</body>
+<!--<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script  type="text/javascript">
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            ss:"NA",
+            range:"NA",
+            left:0,
+            right:0,
+            speed:0,
+        },
+        methods: {
+            ssEvent:function () {
+                // alert("点火");
+                alert(this.ss + this.range + this.left + this.right + this.speed);
+                // alert(this.ss);
+            },
+            tmEvent:function () {
+                // alert("挂挡")
+                // alert(this.range);
+            },
+            turnLeftEvent:function () {
+                // alert("左转")
+                // alert(this.left += 1)
+                this.left += 1;
+            },
+            turnRightEvent:function () {
+                // alert("右转")
+                // alert(this.right += 1)
+                this.right += 1;
+            },
+            speedDownEvent:function () {
+                // alert("减速")
+                // alert(this.speed -= 1)
+                this.speed -= 1;
+            },
+            speedUpEvent:function () {
+                // alert("加速")
+                // alert(this.speed += 1)
+                this.speed += 1
+            },
+        }
+})
+</script>
+</html>
