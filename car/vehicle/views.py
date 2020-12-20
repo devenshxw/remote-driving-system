@@ -8,9 +8,6 @@ class LoginView(View):
         # 接收数据
         vin = request.GET.get('vincode')
         pwd = request.GET.get('password')
-        print(vin)
-        print(pwd)
-        print("---1---")
         # 校验数据
         if not all([vin, pwd]):
             return JsonResponse({'msg': '0数据不完整'})
@@ -30,10 +27,9 @@ class LoginView(View):
         #     return JsonResponse({'msg': 'VIN或密码错误'})
         try:
             ret = Vehicles.objects.get(vin=vin, pwd=pwd)
-            print("---2---")
         except Exception:
             return JsonResponse({'msg': '1VIN或密码错误'})
         else:
             if ret:
-                print("---3---")
                 return JsonResponse({'msg': '2登录成功'})
+
