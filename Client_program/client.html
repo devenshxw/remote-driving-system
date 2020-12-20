@@ -172,47 +172,102 @@
     </div>
 </div>
 </body>
-<!--<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>-->
+<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script  type="text/javascript">
     var vm = new Vue({
         el: '#app',
         data: {
-            ss:"NA",
-            range:"NA",
-            left:0,
-            right:0,
-            speed:0,
+            ss:"",
+            range:"",
         },
         methods: {
             ssEvent:function () {
-                // alert("点火");
-                alert(this.ss + this.range + this.left + this.right + this.speed);
-                // alert(this.ss);
+                // 启停开关
+                if(this.ss){
+                    var bit0 = '1';
+                }else{
+                    var bit0 = '0';
+                };
+                var signal = bit0 + '0' + '0' + '0' + '0' + '0';
+
+                let url = 'http://192.168.0.112:8000/client/ss/?c2vsignal=' + signal;
+                axios.get(url).then((response)=>{
+                    alert(response.data.msg);
+                }).catch((error)=>{
+                    alert(error);
+                });
             },
             tmEvent:function () {
-                // alert("挂挡")
-                // alert(this.range);
+                // 挡位杆
+                if(this.range==='p-range'){
+                    var bit1 = '1';
+                }else if(this.range==='r-range'){
+                    var bit1 = '2';
+                }else if(this.range==='n-range'){
+                    var bit1 = '3';
+                }else if(this.range==='d-range'){
+                    var bit1 = '4';
+                }else{
+                    var bit1 = '0';
+                };
+                var signal = '0' + bit1 + '0' + '0' + '0' +'0';
+
+                let url = 'http://192.168.0.112:8000/client/tm/?c2vsignal=' + signal;
+                axios.get(url).then((response)=>{
+                    alert(response.data.msg);
+                }).catch((error)=>{
+                    alert(error);
+                });
             },
             turnLeftEvent:function () {
-                // alert("左转")
-                // alert(this.left += 1)
-                this.left += 1;
+                // 左转向舵
+                var bit2 = '1';
+                var signal = '0' + '0' + bit2 + '0' + '0' +'0';
+
+                let url = 'http://192.168.0.112:8000/client/turnLeft/?c2vsignal=' + signal;
+                axios.get(url).then((response)=>{
+                    alert(response.data.msg);
+                }).catch((error)=>{
+                    alert(error);
+                });
             },
             turnRightEvent:function () {
-                // alert("右转")
-                // alert(this.right += 1)
-                this.right += 1;
+                // 右转向舵
+                var bit3 = '1';
+                var signal = '0' + '0' + '0' + bit3 + '0' +'0';
+
+                let url = 'http://192.168.0.112:8000/client/turnRight/?c2vsignal=' + signal;
+                axios.get(url).then((response)=>{
+                    alert(response.data.msg);
+                }).catch((error)=>{
+                    alert(error);
+                });
             },
             speedDownEvent:function () {
-                // alert("减速")
-                // alert(this.speed -= 1)
-                this.speed -= 1;
+                // 减速踏板
+                var bit4 = '1';
+                var signal = '0' + '0' + '0' + '0' + bit4 +'0';
+
+                let url = 'http://192.168.0.112:8000/client/speedDown/?c2vsignal=' + signal;
+                axios.get(url).then((response)=>{
+                    alert(response.data.msg);
+                }).catch((error)=>{
+                    alert(error);
+                });
             },
             speedUpEvent:function () {
-                // alert("加速")
-                // alert(this.speed += 1)
-                this.speed += 1
+                // 加速踏板
+                var bit5 = '1';
+                var signal = '0' + '0' + '0' + '0' + '0' + bit5;
+
+                let url = 'http://192.168.0.112:8000/client/speedUp/?c2vsignal=' + signal;
+                axios.get(url).then((response)=>{
+                    alert(response.data.msg);
+                }).catch((error)=>{
+                    alert(error);
+                });
             },
         }
 })
