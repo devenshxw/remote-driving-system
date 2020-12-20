@@ -20,12 +20,13 @@ class CarServer(TcpServer):
                 video_ctrl_process = multiprocessing.Process(target=video_control.video_ctrl)
                 car_ctrl_process.start()
                 video_ctrl_process.start()
-            else:
-                # 如果客户端关闭，终止子进程
-                car_ctrl_process.terminate()
-                video_ctrl_process.terminate()
-                print("客户端%s退出" % str(client_addr))
-                break
+                msg = request.decode("utf-8")
+                if not msg == "connect ok":
+                    # 如果客户端关闭，终止子进程
+                    car_ctrl_process.terminate()
+                    video_ctrl_process.terminate()
+                    print("客户端%s退出" % str(client_addr))
+                    break
 
 
 # 设定小车服务器的IP和端口

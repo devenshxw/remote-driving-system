@@ -9,10 +9,11 @@ def recv_msg(client_socket):
     while True:
         recv_content = client_socket.recv(1024)
         if recv_content:
-            #    包头     发动机启动    变速箱   加速减速    转向   包尾
-            #      #         1          0        0        0       $
+            # 起停开关    档位杆   左转向舵    右转向舵   加速踏板    减速踏板
+            #    0          0        1        0       0         0
             print("开始小车控制...")
             recv_content = recv_content.decode("utf-8")
+            print("收到的指令是：%s" % recv_content)
         else:
             # 关闭发动机
             break
