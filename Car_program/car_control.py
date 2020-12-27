@@ -3,6 +3,7 @@
 import threading
 import time
 from server import TcpServer
+from . import key_control
 
 
 def recv_msg(client_socket):
@@ -14,6 +15,7 @@ def recv_msg(client_socket):
             print("开始小车控制...")
             recv_content = recv_content.decode("utf-8")
             print("收到的指令是：%s" % recv_content)
+            key_control.work(recv_content)
         else:
             # 关闭发动机
             break

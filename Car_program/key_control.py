@@ -1,11 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import sys
 import time
 import RPi.GPIO as GPIO
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QApplication
 
 
 # 小车电机引脚定义
@@ -19,7 +16,9 @@ ENB = 13
 
 
 PWM_MAX = 2000
-IDLE_SPEED = 0.01 * PWM_MAX
+
+pwma_speed = 50
+pwmb_speed = 50
 
 # 设置GPIO口为BCM编码方式
 GPIO.setmode(GPIO.BCM)
@@ -27,147 +26,6 @@ GPIO.setmode(GPIO.BCM)
 
 # 忽略警告信息
 GPIO.setwarnings(False)
-
-
-# 电机引脚初始化操作
-def motor_init():
-    global pwm_ENA
-    global pwm_ENB
-    global delaytime
-    GPIO.setup(ENA, GPIO.OUT, initial=GPIO.HIGH)
-    GPIO.setup(AIN1, GPIO.OUT, initial=GPIO.LOW)
-    GPIO.setup(AIN2, GPIO.OUT, initial=GPIO.LOW)
-    GPIO.setup(ENB, GPIO.OUT, initial=GPIO.HIGH)
-    GPIO.setup(BIN1, GPIO.OUT, initial=GPIO.LOW)
-    GPIO.setup(BIN2, GPIO.OUT, initial=GPIO.LOW)
-    # 设置pwm引脚和频率为2000hz
-    pwm_ENA = GPIO.PWM(ENA, PWM_MAX)
-    pwm_ENB = GPIO.PWM(ENB, PWM_MAX)
-    pwm_ENA.start(0)
-    pwm_ENB.start(0)
-
-
-# 小车前进
-def run(pwma_speed, pwmb_speed):
-    GPIO.output(AIN1, GPIO.HIGH)
-    GPIO.output(AIN2, GPIO.LOW)
-    GPIO.output(BIN1, GPIO.HIGH)
-    GPIO.output(BIN2, GPIO.LOW)
-    pwm_ENA.ChangeDutyCycle(pwma_speed)
-    pwm_ENB.ChangeDutyCycle(pwmb_speed)
-
-
-# 小车后退
-def back(pwma_speed, pwmb_speed):
-    GPIO.output(AIN1, GPIO.LOW)
-    GPIO.output(AIN2, GPIO.HIGH)
-    GPIO.output(BIN1, GPIO.LOW)
-    GPIO.output(BIN2, GPIO.HIGH)
-    pwm_ENA.ChangeDutyCycle(pwma_speed)
-    pwm_ENB.ChangeDutyCycle(pwmb_speed)
-
-
-# 小车左转
-def left(pwma_speed, pwmb_speed):
-    GPIO.output(AIN1, GPIO.LOW)
-    GPIO.output(AIN2, GPIO.LOW)
-    GPIO.output(BIN1, GPIO.HIGH)
-    GPIO.output(BIN2, GPIO.LOW)
-    pwm_ENA.ChangeDutyCycle(pwma_speed)
-    pwm_ENB.ChangeDutyCycle(pwmb_speed)
-
-
-# 小车右转
-def right(pwma_speed, pwmb_speed):
-    GPIO.output(AIN1, GPIO.HIGH)
-    GPIO.output(AIN2, GPIO.LOW)
-    GPIO.output(BIN1, GPIO.LOW)
-    GPIO.output(BIN2, GPIO.LOW)
-    pwm_ENA.ChangeDutyCycle(pwma_speed)
-    pwm_ENB.ChangeDutyCycle(pwmb_speed)
-
-
-# 小车停止
-def brake(pwma_speed, pwmb_speed):
-    GPIO.output(AIN1, GPIO.LOW)
-    GPIO.output(AIN2, GPIO.LOW)
-    GPIO.output(BIN1, GPIO.LOW)
-    GPIO.output(BIN2, GPIO.LOW)
-    pwm_ENA.ChangeDutyCycle(pwma_speed)
-    pwm_ENB.ChangeDutyCycle(pwmb_speed)
-
-
-class Example(QWidget):
-
-    def __init__(self):
-        super().__init__()
-
-        self.initUI()
-
-        self.pwma_speed = IDLE_SPEED
-        self.pwmb_speed = IDLE_SPEED
-
-    def initUI(self):
-        self.setGeometry(300, 300, 250, 150)
-        self.setWindowTitle('Event handler')
-        self.show()
-
-    def keyPressEvent(self, e):
-
-        if e.key() == Qt.Key_S:
-            print("按下S ==> 启动/停止")
-            time.sleep(2)
-            motor_init()
-
-        elif e.key() == Qt.Key_P:
-            print("按下P ==> P档")
-        elif e.key() == Qt.Key_R:
-            print("按下R ==> R挡")
-        elif e.key() == Qt.Key_N:
-            print("按下N ==> N挡")
-        elif e.key() == Qt.Key_D:
-            print("按下D ==> D挡")
-            run(self.pwma_speed, self.pwmb_speed)
-
-        elif e.key() == Qt.Key_J:
-            print("按下J ==> 前进1步")
-            self.pwma_speed += 1
-            self.pwmb_speed += 1
-            run(self.pwma_speed, self.pwmb_speed)
-        elif e.key() == Qt.Key_K:
-            print("按下K ==> 后退1步")
-        elif e.key() == Qt.Key_H:
-            print("按下H ==> 左转1步")
-        elif e.key() == Qt.Key_L:
-            print("按下L ==> 右转1步")
-        else:
-            print("按下其他键")
-
-
-def main():
-    try:
-        app = QApplication(sys.argv)
-        ex = Example()
-        sys.exit(app.exec_())
-    except KeyboardInterrupt:
-        pass
-    pwm_ENA.stop()
-    pwm_ENB.stop()
-    GPIO.cleanup()
-
-
-if __name__ == '__main__':
-    main()
-
-pwma_speed = IDLE_SPEED
-pwmb_speed = IDLE_SPEED
-
-
-def ss_stop():
-    """停止"""
-    pwm_ENA.stop()
-    pwm_ENB.stop()
-    GPIO.cleanup()
 
 
 def ss_start():
@@ -186,6 +44,13 @@ def ss_start():
     pwm_ENB = GPIO.PWM(ENB, PWM_MAX)
     pwm_ENA.start(0)
     pwm_ENB.start(0)
+
+
+def ss_stop():
+    """停止"""
+    pwm_ENA.stop()
+    pwm_ENB.stop()
+    GPIO.cleanup()
 
 
 def tm_p():
@@ -242,18 +107,16 @@ def turn_right():
 
 def speed_down():
     """减速"""
-    pwma_speed -= 1
-    pwmb_speed -= 1
     pwm_ENA.ChangeDutyCycle(pwma_speed)
     pwm_ENB.ChangeDutyCycle(pwmb_speed)
+    time.sleep(0.5)
 
     
 def speed_up():
     """加速"""
-    pwma_speed += 1
-    pwmb_speed += 1
     pwm_ENA.ChangeDutyCycle(pwma_speed)
     pwm_ENB.ChangeDutyCycle(pwmb_speed)
+    time.sleep(0.5)
 
 
 def work(signal):
@@ -292,3 +155,5 @@ def work(signal):
         pass
 
 
+if __name__ == '__main__':
+    work(signal)
