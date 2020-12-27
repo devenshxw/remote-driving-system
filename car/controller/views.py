@@ -22,3 +22,5 @@ class ControllerView(View):
         tcp_socket.close()
         # 返回应答
         return JsonResponse({'msg': signal})
+
+
