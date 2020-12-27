@@ -17,8 +17,8 @@ ENB = 13
 
 PWM_MAX = 2000
 
-pwma_speed = 50
-pwmb_speed = 50
+pwma_speed = 85
+pwmb_speed = 85
 
 # 设置GPIO口为BCM编码方式
 GPIO.setmode(GPIO.BCM)
@@ -109,14 +109,15 @@ def speed_down():
     """减速"""
     pwm_ENA.ChangeDutyCycle(pwma_speed)
     pwm_ENB.ChangeDutyCycle(pwmb_speed)
-    time.sleep(0.5)
 
     
 def speed_up():
     """加速"""
     pwm_ENA.ChangeDutyCycle(pwma_speed)
     pwm_ENB.ChangeDutyCycle(pwmb_speed)
-    time.sleep(0.5)
+    time.sleep(0.1)
+    pwm_ENA.ChangeDutyCycle(0)
+    pwm_ENB.ChangeDutyCycle(0)
 
 
 def work(signal):
