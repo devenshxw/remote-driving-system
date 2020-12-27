@@ -3,7 +3,7 @@
 import threading
 import time
 from server import TcpServer
-from . import key_control
+import key_control
 
 
 def recv_msg(client_socket):
