@@ -48,7 +48,7 @@ class VideoCtrlServer(TcpServer):
 
 
 # 设定小车控制的IP和端口
-SERVER_ADDR = (HOST, PORT) = "192.168.0.114", 20000
+SERVER_ADDR = (HOST, PORT) = "192.168.0.10", 20000
 
 
 def video_ctrl():

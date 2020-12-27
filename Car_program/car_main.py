@@ -30,7 +30,7 @@ class CarServer(TcpServer):
 
 
 # 设定小车服务器的IP和端口
-SERVER_ADDR = (HOST, PORT) = "192.168.0.114", 8888
+SERVER_ADDR = (HOST, PORT) = "192.168.0.10", 8888
 
 
 def car_main():

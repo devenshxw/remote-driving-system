@@ -14,7 +14,7 @@ class ControllerView(View):
         tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         print("---3---")
         # 链接
-        tcp_socket.connect(("192.168.0.114", 10000))
+        tcp_socket.connect(("192.168.0.10", 10000))
         print("---4---")
         # 收发数据
         tcp_socket.send(signal.encode('utf-8'))

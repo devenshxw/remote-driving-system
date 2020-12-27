@@ -54,7 +54,7 @@ class CarCtrlServer(TcpServer):
 
 
 # 设定小车控制的IP和端口
-SERVER_ADDR = (HOST, PORT) = "192.168.0.114", 10000
+SERVER_ADDR = (HOST, PORT) = "192.168.0.10", 10000
 
 
 def car_ctrl():

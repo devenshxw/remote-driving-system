@@ -36,7 +36,7 @@ class LoginView(View):
                 # 创建套接字
                 tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 # 链接
-                tcp_socket.connect(("192.168.0.114", 8888))
+                tcp_socket.connect(("192.168.0.10", 8888))
                 # 收发数据
                 tcp_socket.send('connect ok'.encode('utf-8'))
                 # 关闭套接字
